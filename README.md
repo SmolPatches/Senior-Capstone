@@ -24,11 +24,15 @@ f.putj('{"name" : "bob", "status" : "cool_person", "follows" : ["fred", "dani"]}
 f.putj('{"_id":  "1", "name" : "fred", "status" : "cool_person", "follows" : ["alice", "greg"]}')
 ```
 Cog can utilize JSON in order to map relations between nodes  
-
 ### CSV Support 
-## Nested Edges
-## Properties
+```python 
+from cog.torque import Graph
+g = Graph("books")
+g.load_csv('test/test-data/books.csv', "book_id")
+```
 ## Database Views
 Graphs built within code have the ability to build views to render them.
 ## Resources
 [Cog Wiki](https://arun1729.github.io/cog/)
+# Conclusion
+Cog is young and made with simplicity as a priority because these two things, Cog lacks the featureful environment that Neo4j has and the documentation is not as extensive as competitors.
