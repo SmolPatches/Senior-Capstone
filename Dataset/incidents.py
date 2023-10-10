@@ -1,4 +1,5 @@
 import random
+import csv
 from datetime import datetime, timedelta
 
 # Number of data entries to generate
@@ -33,4 +34,19 @@ for _ in range(num_entries):
     }
     data_entries.append(entry)
 
-data_entries[:5]  # Display the first 5 entries for review
+# Specify the CSV file name
+csv_file_name = 'Incidents_entries.csv'
+
+# Write data entries to the CSV file
+with open(csv_file_name, mode='w', newline='') as csv_file:
+    fieldnames = ["ID", "Severity", "AffectedServer", "ReportedDate", "Description"]
+    writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+
+    # Write the header row
+    writer.writeheader()
+
+    # Write the data entries
+    for entry in data_entries:
+        writer.writerow(entry)
+
+print(f"Data has been written to {csv_file_name}")
