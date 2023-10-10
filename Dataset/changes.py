@@ -1,5 +1,5 @@
-#changes
 import random
+import csv
 from datetime import datetime, timedelta
 
 # Define constants
@@ -38,5 +38,19 @@ for _ in range(NUM_RECORDS):
         "AffectedServer": servers
     })
 
-# Return first 5 rows to verify
-data[:5]
+# Specify the CSV file name
+csv_file_name = 'change_records.csv'
+
+# Write data to the CSV file
+with open(csv_file_name, mode='w', newline='') as csv_file:
+    fieldnames = ["ID", "StartDate", "EndDate", "Description", "AffectedServer"]
+    writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+    
+    # Write the header row
+    writer.writeheader()
+    
+    # Write the data entries
+    for entry in data:
+        writer.writerow(entry)
+
+print(f"Data has been written to {csv_file_name}")
