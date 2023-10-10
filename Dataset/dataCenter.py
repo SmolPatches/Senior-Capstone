@@ -1,4 +1,5 @@
-#DataCenter
+import random
+import csv
 
 state_city_mapping = {
     "TX": ["Houston", "Dallas", "Austin", "San Antonio"],
@@ -20,5 +21,19 @@ for i in range(1, 11):  # From DC-01 to DC-10
         "City": city
     })
 
-# Return the generated data centers for verification
-data_centers
+# Specify the CSV file name
+csv_file_name = 'data_centers.csv'
+
+# Write data centers to the CSV file
+with open(csv_file_name, mode='w', newline='') as csv_file:
+    fieldnames = ["Name", "State", "City"]
+    writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+    
+    # Write the header row
+    writer.writeheader()
+    
+    # Write the data centers
+    for center in data_centers:
+        writer.writerow(center)
+
+print(f"Data centers have been written to {csv_file_name}")
