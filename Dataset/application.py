@@ -1,4 +1,6 @@
-#Application
+import random
+import csv
+
 # Define constants and lists
 APP_NAMES = [
     "Mango Tango App", "Cool Cats App", "Jazzy Java App", "Stellar Spaces App",
@@ -22,5 +24,19 @@ for i in range(1, 2000):  # From APP-1001 to APP-1999
         "Servers": servers
     })
 
-# Return first 5 rows to verify
-applications_data[:5]
+# Specify the CSV file name
+csv_file_name = 'applications_data.csv'
+
+# Write application data to the CSV file
+with open(csv_file_name, mode='w', newline='') as csv_file:
+    fieldnames = ["Name", "Description", "Servers"]
+    writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+    
+    # Write the header row
+    writer.writeheader()
+    
+    # Write the data entries
+    for entry in applications_data:
+        writer.writerow(entry)
+
+print(f"Application data has been written to {csv_file_name}")
