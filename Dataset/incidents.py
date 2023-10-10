@@ -35,7 +35,7 @@ for _ in range(num_entries):
     data_entries.append(entry)
 
 # Specify the CSV file name
-csv_file_name = 'Incidents_entries.csv'
+csv_file_name = 'incidents_entries.csv'
 
 # Write data entries to the CSV file
 with open(csv_file_name, mode='w', newline='') as csv_file:
