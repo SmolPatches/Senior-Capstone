@@ -7,7 +7,7 @@ import csv
 faker = Faker("en_US")
 seed = urandom(64)
 Faker.seed(seed)
-fake_max = 10e6 # random_int to be used
+fake_max =2e4 # random_int to be used
 use_faker = True
 def make_app_id(fake_max,rand_int):
     rand_str = str(rand_int)
