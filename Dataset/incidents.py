@@ -9,9 +9,16 @@ num_entries = 1e6 # sane default
 severities = ["1-High", "2-Medium", "3-Low", "4-Very Low"]
 servers = [f"SRV-{str(i).zfill(7)}" for i in range(1, 11)]  # Generate 10 server names for demo purposes
 descriptions = [
-    "CPU has exceeded threshold: (75%) currently ({:.2f}%)",
+    "CPU has exceeded threshold: (75%) currently ({0:.2f}%)",
+    "Laptop LAQ{0} shuts down due to overheating",
     "Server SRV-{0} experienced a memory leak",
-    "Application on SRV-{0} failed to start after update"
+    "Application on SRV-{0} failed to start after update",
+    "Server SRV-{0} ran out of memory and was rebooted",
+    "Disk space on SRV-{0} is below 10% available",
+    "SRV-{0} failed to establish a network connection",
+    "Unexpected disk I/O spike detected on SRV-{0}",
+    "Storage subsystem on SRV-{0} reported read/write errors",
+    "Network interface on SRV-{0} dropped packets for 10 minutes"
 ]
 
 # Function to generate a random date and time within the past month
