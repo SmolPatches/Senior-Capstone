@@ -28,7 +28,7 @@ for _ in range(NUM_RECORDS):
     start_date = random_date()
     end_date = start_date + timedelta(days=random.randint(1, MAX_DAYS_DIFF))
     description = random.choice(DESCRIPTIONS)
-    servers = ", ".join(random_servers())
+    servers = ": ".join(random_servers())
 
     data.append({
         "ID": f"CHG-{10001 + _}",
