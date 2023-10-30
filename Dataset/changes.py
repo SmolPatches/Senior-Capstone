@@ -39,7 +39,7 @@ for _ in range(NUM_RECORDS):
     })
 
 # Specify the CSV file name
-csv_file_name = 'change_records.csv'
+csv_file_name = 'Changes.csv'
 
 # Write data to the CSV file
 with open(csv_file_name, mode='w', newline='') as csv_file:

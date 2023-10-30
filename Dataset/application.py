@@ -36,7 +36,7 @@ for i in range(1, 2000):  # From APP-1001 to APP-1999
     # use company based description if faker is enabled
     description = faker.bs() if use_faker else random.choice(APP_NAMES)
     num_servers = random.randint(1, 10)
-    servers = ", ".join(random.sample(ALL_SERVERS, num_servers))
+    servers = ": ".join(random.sample(ALL_SERVERS, num_servers))
 
     applications_data.append({
         "Name": app_name,
@@ -45,7 +45,7 @@ for i in range(1, 2000):  # From APP-1001 to APP-1999
     })
 
 # Specify the CSV file name
-csv_file_name = 'applications_data.csv'
+csv_file_name = 'Applications.csv'
 
 # Write application data to the CSV file
 with open(csv_file_name, mode='w', newline='') as csv_file:
