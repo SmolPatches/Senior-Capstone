@@ -1,1 +1,1 @@
-# BoA-Capstone
+# Senior Capstone
