@@ -1,4 +1,4 @@
-# BoA-Capstone
+# Senior-Capstone
 # Cog Integration
 
 Cog is a 'Micro' Graph Database meaning its simple and concise, if 
