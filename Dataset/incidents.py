@@ -3,7 +3,7 @@ import csv
 from datetime import datetime, timedelta
 
 # Number of data entries to generate
-num_entries = 1e6 # sane default
+num_entries = 2000 # sane default
 
 # Lists for random selection
 severities = ["1-High", "2-Medium", "3-Low", "4-Very Low"]
@@ -26,16 +26,20 @@ def random_date():
     end_date = datetime.now()
     start_date = end_date - timedelta(days=30)
     random_date = start_date + (end_date - start_date) * random.random()
-    return random_date.strftime('%m/%d/%y %H:%M')
+    formatted_date = random_date.strftime('%m/%d/%y %H:%M')
+    epoch_time = int(random_date.timestamp()) #in seconds
+    return formatted_date, epoch_time
 
 # Generate data entries
 data_entries = []
 for _ in range(num_entries):
+    reported_date, epoch_time = random_date()
     entry = {
         "ID": f"INC-{random.randint(1000001, 1999999)}",
         "Severity": random.choice(severities),
         "AffectedServer": random.choice(servers),
-        "ReportedDate": random_date(),
+        "ReportedDate": reported_date,
+        "EpochTime": epoch_time,
         "Description": random.choice(descriptions).format(random.randint(1, 9999999))
     }
     data_entries.append(entry)
@@ -45,7 +49,7 @@ csv_file_name = 'incidents_entries.csv'
 
 # Write data entries to the CSV file
 with open(csv_file_name, mode='w', newline='') as csv_file:
-    fieldnames = ["ID", "Severity", "AffectedServer", "ReportedDate", "Description"]
+    fieldnames = ["ID", "Severity", "AffectedServer", "ReportedDate", "EpochTime", "Description"]
     writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
 
     # Write the header row
