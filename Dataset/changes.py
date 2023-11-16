@@ -26,14 +26,18 @@ data = []
 
 for _ in range(NUM_RECORDS):
     start_date = random_date()
+    start_epoch_time = int(start_date.timestamp()) #in seconds
     end_date = start_date + timedelta(days=random.randint(1, MAX_DAYS_DIFF))
+    end_epoch_time = int(end_date.timestamp()) #in seconds
     description = random.choice(DESCRIPTIONS)
     servers = ", ".join(random_servers())
 
     data.append({
         "ID": f"CHG-{10001 + _}",
         "StartDate": start_date.strftime('%m/%d/%y %H:%M'),
+        "StartEpochTime": start_epoch_time,
         "EndDate": end_date.strftime('%m/%d/%y %H:%M'),
+        "EndEpochTime": end_epoch_time,
         "Description": description,
         "AffectedServer": servers
     })
@@ -43,7 +47,7 @@ csv_file_name = 'change_records.csv'
 
 # Write data to the CSV file
 with open(csv_file_name, mode='w', newline='') as csv_file:
-    fieldnames = ["ID", "StartDate", "EndDate", "Description", "AffectedServer"]
+    fieldnames = ["ID", "StartDate", "StartEpochTime", "EndDate", "EndEpochTime", "Description", "AffectedServer"]
     writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
     
     # Write the header row
