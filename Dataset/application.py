@@ -18,25 +18,32 @@ def make_app_id(fake_max,rand_int):
     if len_diff > 0 :
         return "0"*len_diff + rand_str
 
-# utilize faker.company()
-
 # Define constants and lists
 APP_NAMES = [
     "Mango Tango App", "Cool Cats App", "Jazzy Java App", "Stellar Spaces App",
     "Neptune Notes App", "Moonwalk Music App", "Sunny Safari App", "Pixel Pals App",
     "Doodle Dots App", "Terra Tracks App"
 ]
-ALL_SERVERS = [f"SRV-010{i:01}" for i in range(1, 10000)] + [f"SRV-100{i:01}" for i in range(1, 10000)]
-
+# servers parity amongst all files
+ALL_SERVERS = []
+server_txt_name = "servers.txt" # used for parity of servers in other files
+try:
+    with open(server_txt_name,"r") as server_ids:
+        ALL_SERVERS = server_ids.read().split(",")
+        print(f"servers: {ALL_SERVERS}")
+except FileNotFoundError as e:
+    print(e)
+    print("You must run servers.py first in order to generate a servers.txt file")
+    raise SystemExit
 # Generate the dataset for APP-1001 through APP-1999
 applications_data = []
 for i in range(1, 2000):  # From APP-1001 to APP-1999
     # use company based name for each app if use_faker is true
-    app_name = f'APP-{make_app_id(fake_max,faker.random_int(0,fake_max))}' if use_faker else f"APP-{1000 + i}"
+    app_name = f'APP-{make_app_id(fake_max,faker.unique.random_int(0,fake_max))}' if use_faker else f"APP-{1000 + i}"
     # use company based description if faker is enabled
     description = faker.bs() if use_faker else random.choice(APP_NAMES)
     num_servers = random.randint(1, 10)
-    servers = ", ".join(random.sample(ALL_SERVERS, num_servers))
+    servers = ": ".join(random.sample(ALL_SERVERS, num_servers))
 
     applications_data.append({
         "Name": app_name,
@@ -45,7 +52,7 @@ for i in range(1, 2000):  # From APP-1001 to APP-1999
     })
 
 # Specify the CSV file name
-csv_file_name = 'applications_data.csv'
+csv_file_name = 'Applications.csv'
 
 # Write application data to the CSV file
 with open(csv_file_name, mode='w', newline='') as csv_file:
