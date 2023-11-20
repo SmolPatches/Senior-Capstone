@@ -1,7 +1,8 @@
 import random
 import csv
 from datetime import datetime, timedelta
-
+from faker import Faker
+fake = Faker("en_US")
 # Number of data entries to generate
 num_entries = int(1e4) # sane default
 debug = False
@@ -35,7 +36,7 @@ def random_date():
 data_entries = []
 for _ in range(num_entries):
     entry = {
-        "ID": f"INC-{random.randint(1000001, 1999999)}",
+        "ID": f"INC-{fake.random_int(1000001, 1999999)}",
         "Severity": random.choice(severities),
         "AffectedServer": random.choice(servers),
         "ReportedDate": random_date(),
