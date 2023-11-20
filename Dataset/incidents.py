@@ -3,7 +3,7 @@ import csv
 from datetime import datetime, timedelta
 
 # Number of data entries to generate
-num_entries = 1e6 # sane default
+num_entries = int(1e4) # sane default
 debug = False
 # Lists for random selection
 severities = ["1-High", "2-Medium", "3-Low", "4-Very Low"]
