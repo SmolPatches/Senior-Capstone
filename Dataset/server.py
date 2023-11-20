@@ -1,17 +1,30 @@
 import random
+from faker import Faker
 import csv
+fake = Faker("en_US")
+def make_id(fake_max):
+    rand_int = fake.random_int(0,fake_max)
+    rand_str = str(rand_int)
+    fake_max_str = str(fake_max)
+    len_diff = len(fake_max_str) - len(rand_str)
+    if len_diff == 0:
+        return rand_int
+    if len_diff > 0 :
+        return "0"*len_diff + rand_str
 
+# make servers 
+all_servers_data = []
+server_entry_num = 1000
+server_ids = [f"SRV-{make_id(server_entry_num)}" for i in range(server_entry_num)]
 # Define constants and lists for server dataset
 OS_LIST = ["Linux", "Windows"]
 DATA_CENTERS = [f"DC-{i:01}" for i in range(1, 11)]
-PHYSICAL_SERVERS = [f"SRV-010{str(i).zfill(3)}" for i in range(1, 10000)]
-
+PHYSICAL_SERVERS = [server_ids[i] for i in range(0,len(server_ids)//2)] # half of servers is phyiscal
+VIRTUAL_SERVERS = [server_ids[i] for i in range(len(server_ids)//2,len(server_ids))] # half of servers is phyiscal
 # Generate data for all servers
-all_servers_data = []
-
 # Generate data for all physical servers
-for i in range(1, 10000):  # From SRV-010001 to SRV-019999
-    server_name = f"SRV-010{i:03}"
+for server in PHYSICAL_SERVERS:  # From SRV-010001 to SRV-019999
+    server_name = server
     os_type = "VirtualBox"
     data_center = random.choice(DATA_CENTERS)
     is_virtual = "No"
@@ -25,14 +38,10 @@ for i in range(1, 10000):  # From SRV-010001 to SRV-019999
         "ParentServer": parent_server
     })
 
-# Add empty rows (you can specify how many you want)
-empty_rows = 10
-for _ in range(empty_rows):
-    all_servers_data.append({})
 
 # Generate data for all virtual servers
-for i in range(1, 10000):  # From SRV-100001 to SRV-199999
-    server_name = f"SRV-100{i:03}"
+for server in VIRTUAL_SERVERS:
+    server_name = server
     os_type = random.choice(OS_LIST)
     parent_server = random.choice(PHYSICAL_SERVERS)
     # Extracting the data center from the associated physical server
@@ -48,8 +57,8 @@ for i in range(1, 10000):  # From SRV-100001 to SRV-199999
     })
 
 # Specify the CSV file name
-csv_file_name = 'servers_data.csv'
-
+csv_file_name = 'Servers.csv'
+server_txt_name = "servers.txt" # used for parity of servers in other files
 # Write all server data to the CSV file
 with open(csv_file_name, mode='w', newline='') as csv_file:
     fieldnames = ["Name", "OS", "DataCenter", "IsVirtual", "ParentServer"]
@@ -61,5 +70,6 @@ with open(csv_file_name, mode='w', newline='') as csv_file:
     # Write the data entries, including empty rows
     for entry in all_servers_data:
         writer.writerow(entry)
-
-print(f"Server data has been written to {csv_file_name}")
+with open(server_txt_name,"w") as server_file:
+    server_file.write(",".join(server_ids))
+print(f"Generated CSV: {csv_file_name}\tServer List:{server_txt_name}")

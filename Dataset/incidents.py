@@ -4,10 +4,20 @@ from datetime import datetime, timedelta
 
 # Number of data entries to generate
 num_entries = 1e6 # sane default
-
+debug = False
 # Lists for random selection
 severities = ["1-High", "2-Medium", "3-Low", "4-Very Low"]
-servers = [f"SRV-{str(i).zfill(7)}" for i in range(1, 11)]  # Generate 10 server names for demo purposes
+servers = []
+server_txt_name = "servers.txt" # used for parity of servers in other files
+try:
+    with open(server_txt_name,"r") as server_ids:
+        servers = server_ids.read().split(",")
+        if debug == True:
+            print(f"servers: {servers}")
+except FileNotFoundError as e:
+    print(e)
+    print("You must run servers.py first in order to generate a servers.txt file")
+    raise SystemExit
 descriptions = [
     "CPU has exceeded threshold: (75%) currently ({:.2f}%)",
     "Server SRV-{0} experienced a memory leak",
@@ -34,7 +44,7 @@ for _ in range(num_entries):
     data_entries.append(entry)
 
 # Specify the CSV file name
-csv_file_name = 'incidents_entries.csv'
+csv_file_name = 'Incidents.csv'
 
 # Write data entries to the CSV file
 with open(csv_file_name, mode='w', newline='') as csv_file:

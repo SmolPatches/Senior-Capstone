@@ -22,7 +22,7 @@ for i in range(1, 11):  # From DC-01 to DC-10
     })
 
 # Specify the CSV file name
-csv_file_name = 'data_centers.csv'
+csv_file_name = 'DataCenters.csv'
 
 # Write data centers to the CSV file
 with open(csv_file_name, mode='w', newline='') as csv_file:
