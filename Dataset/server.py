@@ -3,7 +3,7 @@ from faker import Faker
 import csv
 fake = Faker("en_US")
 def make_id(fake_max):
-    rand_int = fake.random_int(0,fake_max)
+    rand_int = fake.unique.random_int(0,fake_max)
     rand_str = str(rand_int)
     fake_max_str = str(fake_max)
     len_diff = len(fake_max_str) - len(rand_str)
