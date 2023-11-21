@@ -3,8 +3,19 @@ import csv
 from datetime import datetime, timedelta
 from faker import Faker
 fake = Faker("en_US")
+def make_id(fake_max):
+    rand_int = fake.unique.random_int(0,fake_max)
+    rand_str = str(rand_int)
+    fake_max_str = str(fake_max)
+    len_diff = len(fake_max_str) - len(rand_str)
+    if len_diff == 0:
+        return rand_int
+    if len_diff > 0 :
+        return "0"*len_diff + rand_str
 # Number of data entries to generate
-num_entries = int(1e3) # sane default
+num_entries = int(1_000_000) # evaluation value
+fake_max = int(2_000_000)
+days = 2*365
 debug = False
 # Lists for random selection
 severities = ["1-High", "2-Medium", "3-Low", "4-Very Low"]
@@ -35,7 +46,7 @@ descriptions = [
 # Function to generate a random date and time within the past month
 def random_date():
     end_date = datetime.now()
-    start_date = end_date - timedelta(days=30)
+    start_date = end_date - timedelta(days=days)
     random_date = start_date + (end_date - start_date) * random.random()
     formatted_date = random_date.strftime('%m/%d/%y %H:%M')
     epoch_time = int(random_date.timestamp()) #in seconds
@@ -46,7 +57,7 @@ data_entries = []
 for _ in range(num_entries):
     reported_date, epoch_time = random_date()
     entry = {
-        "ID": f"INC-{fake.unique.random_int(1000001, 1999999)}",
+        "ID": f"INC-{make_id(fake_max)}",
         "Severity": random.choice(severities),
         "AffectedServer": random.choice(servers),
         "ReportedDate": reported_date,

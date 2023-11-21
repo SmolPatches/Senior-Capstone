@@ -14,16 +14,17 @@ def make_id(fake_max):
 
 # make servers 
 all_servers_data = []
-server_entry_num = 1000
-server_ids = [f"SRV-{make_id(server_entry_num)}" for i in range(server_entry_num)]
+fake_max = 150_000 # max_id not for faker to use
+server_entry_num = 110_000 # now 
+# Generate data for all servers
+server_ids = [f"SRV-{make_id(fake_max)}" for i in range(server_entry_num)]
 # Define constants and lists for server dataset
 OS_LIST = ["Linux", "Windows"]
 DATA_CENTERS = [f"DC-{i:01}" for i in range(1, 11)]
-PHYSICAL_SERVERS = [server_ids[i] for i in range(0,len(server_ids)//2)] # half of servers is phyiscal
-VIRTUAL_SERVERS = [server_ids[i] for i in range(len(server_ids)//2,len(server_ids))] # half of servers is phyiscal
-# Generate data for all servers
+PHYSICAL_SERVERS = [server_ids[i] for i in range(0,10_000)] # 10k physical 
+VIRTUAL_SERVERS = [server_ids[i] for i in range(10_000,100_000)] # 100k virts 
 # Generate data for all physical servers
-for server in PHYSICAL_SERVERS:  # From SRV-010001 to SRV-019999
+for server in PHYSICAL_SERVERS:  
     server_name = server
     os_type = "VirtualBox"
     data_center = random.choice(DATA_CENTERS)
