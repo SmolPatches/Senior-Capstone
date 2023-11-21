@@ -26,3 +26,4 @@ MATCH (change:Change)
 WITH change, date(datetime({epochSeconds: toInteger(change.StartEpochTime)})) AS changeDate
 RETURN changeDate.year AS year, changeDate.month AS month, COUNT(change) AS changeCount
 ORDER BY year, month;
+=======
