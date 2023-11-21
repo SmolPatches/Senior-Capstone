@@ -77,7 +77,6 @@ with open(csv_file_name, mode='w', newline='') as csv_file:
     
     # Write the data entries
     for entry in data:
-        print(f"Row {entry}")
         writer.writerow(entry)
 
 print(f"Data has been written to {csv_file_name}")
