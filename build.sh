@@ -5,6 +5,7 @@ then
     echo "venv present"
     alias python3="./venv/bin/python3"
 fi
+echo "Starting Dataset Generation, it may take some time"
 python3 dataset/server.py
 python3 dataset/application.py
 python3 dataset/changes.py
