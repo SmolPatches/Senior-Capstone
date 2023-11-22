@@ -4,6 +4,13 @@
 SHOW DATABASES
 ```
 ```CREATE OR REPLACE DATABASE neo4j```
+# Constraints
+```
+CREATE CONSTRAINT FOR (s:Server) REQUIRE s.Name IS UNIQUE;
+CREATE CONSTRAINT FOR (i:Incident) REQUIRE i.ID IS UNIQUE;
+CREATE CONSTRAINT FOR (c:ChangeRecord) REQUIRE c.ID IS UNIQUE;
+CREATE CONSTRAINT FOR (a:Application) REQUIRE a.Name IS UNIQUE;
+```
 # Load Database ( Order Matters )
 ```
 // Create Servers nodes
@@ -24,7 +31,7 @@ CREATE (chg:Change {
     Description: row.Description
 })
 WITH chg, row
-UNWIND split(row.AffectedServer, ":") AS serverID
+UNWIND split(row.AffectedServer, ": ") AS serverID // space after colon is essential
 MATCH (srv:Server {Name: serverID})
 MERGE (chg)-[:AFFECTS_SERVER]->(srv);
 
