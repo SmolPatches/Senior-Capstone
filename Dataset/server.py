@@ -20,7 +20,7 @@ VIRT_NUM = 100_000
 PHYS_NUM = 10_000
 # Generate data for all servers
 server_ids = [f"SRV-{make_id(fake_max)}" for i in range(server_entry_num)]
-servers_ids_untouched = server_ids # copy to use for servers.txt
+servers_ids_untouched = server_ids.copy() # copy to use for servers.txt
 # Define constants and lists for server dataset
 OS_LIST = ["Linux", "Windows"]
 DATA_CENTERS = [f"DC-{i:01}" for i in range(1, 11)]

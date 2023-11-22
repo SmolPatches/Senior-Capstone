@@ -30,8 +30,6 @@ server_txt_name = "servers.txt" # used for parity of servers in other files
 try:
     with open(server_txt_name,"r") as server_ids:
         SERVERS = server_ids.read().split(",")
-        if debug == True:
-            print(f"servers: {SERVERS}")
 except FileNotFoundError as e:
     print(e)
     print("You must run servers.py first in order to generate a servers.txt file")
