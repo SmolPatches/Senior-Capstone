@@ -23,8 +23,8 @@ server_ids = [f"SRV-{make_id(fake_max)}" for i in range(server_entry_num)]
 # Define constants and lists for server dataset
 OS_LIST = ["Linux", "Windows"]
 DATA_CENTERS = [f"DC-{i:01}" for i in range(1, 11)]
-PHYSICAL_SERVERS = [server_ids[i] for i in range(PHYS_NUM)] # 10k physical 
-VIRTUAL_SERVERS = [server_ids[i] for i in range(VIRT_NUM)] # 100k virts 
+PHYSICAL_SERVERS = [server_ids.pop() for i in range(PHYS_NUM)] # 10k physical 
+VIRTUAL_SERVERS = [server_ids.pop() for i in range(VIRT_NUM)] # 100k virts 
 # Generate data for all physical servers
 for server in PHYSICAL_SERVERS:  
     server_name = server
