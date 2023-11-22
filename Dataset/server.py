@@ -15,7 +15,7 @@ def make_id(fake_max):
 # make servers 
 all_servers_data = []
 fake_max = 150_000 # max_id not for faker to use
-server_entry_num = 110_000 # now 
+server_entry_num = 10_000 # now 
 # Generate data for all servers
 server_ids = [f"SRV-{make_id(fake_max)}" for i in range(server_entry_num)]
 # Define constants and lists for server dataset

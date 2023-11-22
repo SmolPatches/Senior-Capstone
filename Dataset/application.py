@@ -7,6 +7,7 @@ import csv
 faker = Faker("en_US")
 seed = urandom(64)
 Faker.seed(seed)
+APP_SIZE = 1_000
 fake_max = 10_000 # random_int to be used
 use_faker = True
 def make_app_id(fake_max,rand_int):
@@ -37,7 +38,7 @@ except FileNotFoundError as e:
     raise SystemExit
 # Generate the dataset for APP-1001 through APP-1999
 applications_data = []
-for i in range(5000):  # make 5000 random apps  
+for i in range(APP_SIZE):  # make 5000 random apps  
     # use company based name for each app if use_faker is true
     app_name = f'APP-{make_app_id(fake_max,faker.unique.random_int(0,fake_max))}' 
     # use company based description if faker is enabled
