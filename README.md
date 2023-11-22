@@ -8,13 +8,16 @@ pip install faker==19.8.0
 ./build.sh
 ```
 > This will alias python3  to virtual env if present  
-> Then run python3 files, generating CSVs
-Please note that servers.txt must persist and be present in current working directory until all other CSVs are generated
+> Then run python3 files, generating CSVs  
+> Please note that servers.txt must persist and be present in current working directory until all other CSVs are generated  
 # Clear Database
+
 ```cypher
 SHOW DATABASES
 ```
-```CREATE OR REPLACE DATABASE neo4j```
+```cypher
+CREATE OR REPLACE DATABASE neo4j
+```
 # Constraints
 ```cypher
 CREATE CONSTRAINT FOR (s:Server) REQUIRE s.Name IS UNIQUE;
