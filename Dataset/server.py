@@ -15,7 +15,7 @@ def make_id(fake_max):
 # make servers 
 all_servers_data = []
 fake_max = 150_000 # max_id not for faker to use
-server_entry_num = 150_000 # now 
+server_entry_num = 10_000 # now 
 VIRT_NUM = 5_000
 PHYS_NUM = 1_000
 # Generate data for all servers

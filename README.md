@@ -1,7 +1,26 @@
 # Senior-Capstone
+# Clear Database
+```cypher
+SHOW DATABASES
+```
+```CREATE OR REPLACE DATABASE neo4j```
+# Load Database ( Order Matters )
+```
+// Load CSV and create Change nodes with AFFECTS_SERVER relationship to Server nodes
+LOAD CSV WITH HEADERS FROM "file:///Changes.csv" AS row
+CREATE (chg:Change {
+    ID: row.ID,
+    StartDate: row.StartDate,
+    EndDate: row.EndDate,
+    Description: row.Description
+})
+WITH chg, row
+UNWIND split(row.AffectedServer, ":") AS serverID
+MATCH (srv:Server {Name: serverID})
+MERGE (chg)-[:AFFECTS_SERVER]->(srv);
+```
 
-## Useful Queries:
-
+## Date Based Queries 
 ```cypher
 // Retrieve Incidents within a Timeframe
 MATCH (incident:Incident)
@@ -26,4 +45,4 @@ MATCH (change:Change)
 WITH change, date(datetime({epochSeconds: toInteger(change.StartEpochTime)})) AS changeDate
 RETURN changeDate.year AS year, changeDate.month AS month, COUNT(change) AS changeCount
 ORDER BY year, month;
-=======
+```

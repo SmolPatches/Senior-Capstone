@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from faker import Faker
 fake = Faker("en_US")
 # Define constants
-NUM_RECORDS = 5_000 # 50k changes 
+NUM_RECORDS = 500 # 50k changes 
 fake_max = 100_000 #max for id gen 
 MAX_DAYS_DIFF = 2*365  # Max number of days between StartDate and EndDate
 DESCRIPTIONS = ["Windows Patching", "Linux patching", "Database upgrade", "Firmware update", "Network reconfiguration"]
