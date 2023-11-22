@@ -1,4 +1,11 @@
 # Senior-Capstone
+# Requirements
+```pip install faker==19.8.0```
+# Build Script
+```./build.sh```
+> This will alias python3  to virtual env if present  
+> Then run python3 files, generating CSVs
+Please note that servers.txt must persist and be present in current working directory until all other CSVs are generated
 # Clear Database
 ```cypher
 SHOW DATABASES
@@ -28,6 +35,8 @@ CREATE (chg:Change {
     ID: row.ID,
     StartDate: row.StartDate,
     EndDate: row.EndDate,
+    StartEpochTime: row.StartEpochTime, 
+    EndEpochTime: row.EndEpochTime,
     Description: row.Description
 })
 WITH chg, row
@@ -53,6 +62,7 @@ CREATE (inc:Incident {
     Severity: row.Severity,
     ReportedDate: row.ReportedDate,
     Description: row.Description,
+    EpochTime: row.EpochTime,
     AffectedServer: row.AffectedServer
 })
 MERGE (inc)-[:AFFECTS_SERVER]->(srv);
@@ -64,7 +74,15 @@ CREATE (:DataCenter {
     State: row.State,
     City: row.City
 });
+// make relation between virtual and physical servers
+MATCH (vs:Server {IsVirtual: "Yes"})
+MATCH (ps:Server {IsVirtual: "No", Name: vs.ParentServer})
+MERGE (vs)-[:IS_PARENT]->(ps);
 
+// connect servers to datacenter 
+MATCH (s:Server)
+MATCH (dc:DataCenter {Name: s.DataCenter})
+MERGE (s)-[:LOCATED_IN]->(dc);
 ```
 
 ## Date Based Queries 
@@ -92,4 +110,97 @@ MATCH (change:Change)
 WITH change, date(datetime({epochSeconds: toInteger(change.StartEpochTime)})) AS changeDate
 RETURN changeDate.year AS year, changeDate.month AS month, COUNT(change) AS changeCount
 ORDER BY year, month;
+```
+
+## Change Based Queries
+**Get Server Affected By Change**
+```
+MATCH (c:Change{ID:"CHG-086632"})-[AFFECTS_SERVER]-(s)
+return c,s
+```
+**Get Servers Affected By Change**
+```
+MATCH (c:Change)-[AFFECTS_SERVER]-(s)
+return c,s
+LIMIT 25
+```
+
+**Get Servers Affected By a Change in a certain date range** ( based off of epoch time)
+```
+MATCH (change:Change)
+WHERE datetime({epochSeconds: toInteger(change.StartEpochTime)}) >= datetime('2023-01-01T00:00:00Z')
+  AND datetime({epochSeconds: toInteger(change.StartEpochTime)}) <= datetime('2023-12-31T23:59:59Z')
+with change
+match (change)-[AFFECTS_SERVER]-(s:Server)
+return change,s
+LIMIT 100
+```
+## Application Based Queries 
+**See all which apps are hosted on what servers**  
+```
+match (a:Application)-[HOSTS_APP]-(s:Server)
+return a,s
+LIMIT 25
+```
+
+**See all apps with a description and which server it is hosted on**  
+```
+MATCH (a:Application{Description: "empower synergistic markets"})-[HOSTS_APP]->(s)
+return a,s
+LIMIT 25
+```
+
+
+**See which servers a specific app is running on** ( textual )  
+```
+match (a:Application{Name:"APP-07851"})-[HOSTS_APP]-(s:Server)
+return a,s
+LIMIT 25
+```
+
+
+**See if an application is running on a Windows Server**  
+```
+match (a:Application{Name:"APP-07851"})-[HOSTS_APP]-(s:Server{OS:"Windows"})
+return a,s
+LIMIT 25
+```
+
+
+**See the parent servers of a specific application**(as text)    
+```
+match (a:Application{Name:"APP-07851"})-[HOSTS_APP]-(s:Server)
+where s.IsVirtual =  "Yes" 
+match (real:Server{Name:s.ParentServer})
+return real.Name
+```
+**Get the changes that are affecting servers which are hosting apps**  
+```
+MATCH (a:Application)-[HOSTS_APP]->(s:Server)
+match (s)-[AFFECTS_SERVER]-(c:Change)
+return a,s,c
+LIMIT 25
+```
+
+
+**Get the changes that are affecting servers which are hosting apps based on a changes date range**  
+```
+MATCH (a:Application)-[HOSTS_APP]->(s:Server)
+match (s)-[AFFECTS_SERVER]-(c:Change)
+MATCH (c:Change)
+WHERE datetime({epochSeconds: toInteger(c.StartEpochTime)}) >= datetime('2023-01-01T00:00:00Z')
+  AND datetime({epochSeconds: toInteger(c.StartEpochTime)}) <= datetime('2023-12-31T23:59:59Z')
+return a,s,c
+```
+## Server Queries
+```
+match (p:Server)-[:IS_PARENT]-(s:Server)
+return p,s
+LIMIT 50
+```
+## Incident Queries
+```
+MATCH (inc:Incident)-[:AFFECTS_SERVER]->(srv:Server)
+RETURN inc, srv
+Limit 25
 ```

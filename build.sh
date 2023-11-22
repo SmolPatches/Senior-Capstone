@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
-alias python3="./venv/bin/python3"
+# if venv is present use it
+if [ -f ".venv/bin/python3" ];
+then
+    echo "venv present"
+    alias python3="./venv/bin/python3"
+fi
 python3 dataset/server.py
 python3 dataset/application.py
 python3 dataset/changes.py
