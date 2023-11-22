@@ -6,6 +6,15 @@ SHOW DATABASES
 ```CREATE OR REPLACE DATABASE neo4j```
 # Load Database ( Order Matters )
 ```
+// Create Servers nodes
+LOAD CSV WITH HEADERS FROM "file:///Servers.csv" AS row
+CREATE (:Server {
+    Name: row.Name,
+    OS: row.OS,
+    DataCenter: row.DataCenter,
+    IsVirtual: row.IsVirtual,
+    ParentServer: row.ParentServer
+});
 // Load CSV and create Change nodes with AFFECTS_SERVER relationship to Server nodes
 LOAD CSV WITH HEADERS FROM "file:///Changes.csv" AS row
 CREATE (chg:Change {
@@ -18,6 +27,37 @@ WITH chg, row
 UNWIND split(row.AffectedServer, ":") AS serverID
 MATCH (srv:Server {Name: serverID})
 MERGE (chg)-[:AFFECTS_SERVER]->(srv);
+
+// Load CSV and create Applications nodes with HOSTS_APP relationship to Server nodes
+LOAD CSV WITH HEADERS FROM "file:///Applications.csv" AS row
+CREATE (a:Application {
+    Name: row.Name,
+    Description: row.Description
+})
+WITH a, row
+UNWIND split(row.Servers, ": ") AS serverID
+MATCH (srv:Server {Name: serverID})
+MERGE (a)-[:HOSTS_APP]->(srv);
+
+LOAD CSV WITH HEADERS FROM "file:///Incidents.csv" AS row
+MERGE (srv:Server {Name: row.AffectedServer}) 
+CREATE (inc:Incident {
+    ID: row.ID,
+    Severity: row.Severity,
+    ReportedDate: row.ReportedDate,
+    Description: row.Description,
+    AffectedServer: row.AffectedServer
+})
+MERGE (inc)-[:AFFECTS_SERVER]->(srv);
+
+// Create DataCenters nodes
+LOAD CSV WITH HEADERS FROM "file:///DataCenters.csv" AS row
+CREATE (:DataCenter {
+    Name: row.Name,
+    State: row.State,
+    City: row.City
+});
+
 ```
 
 ## Date Based Queries 
