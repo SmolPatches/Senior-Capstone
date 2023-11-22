@@ -13,7 +13,7 @@ def make_id(fake_max):
     if len_diff > 0 :
         return "0"*len_diff + rand_str
 # Number of data entries to generate
-num_entries = int(10_000) # evaluation value
+num_entries = int(1_000_000) # evaluation value
 fake_max = int(2_000_000)
 days = 2*365
 debug = False

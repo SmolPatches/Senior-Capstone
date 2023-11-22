@@ -20,12 +20,12 @@ VIRT_NUM = 100_000
 PHYS_NUM = 10_000
 # Generate data for all servers
 server_ids = [f"SRV-{make_id(fake_max)}" for i in range(server_entry_num)]
+servers_ids_untouched = server_ids # copy to use for servers.txt
 # Define constants and lists for server dataset
 OS_LIST = ["Linux", "Windows"]
 DATA_CENTERS = [f"DC-{i:01}" for i in range(1, 11)]
 PHYSICAL_SERVERS = [server_ids.pop(0) for i in range(PHYS_NUM)] # 10k physical 
 VIRTUAL_SERVERS = [server_ids.pop(0) for i in range(VIRT_NUM)] # 100k virts 
-print(f"Done popping: {PHYSICAL_SERVERS}")
 # Generate data for all physical servers
 for server in PHYSICAL_SERVERS:  
     server_name = server
@@ -75,6 +75,5 @@ with open(csv_file_name, mode='w', newline='') as csv_file:
     for entry in all_servers_data:
         writer.writerow(entry)
 with open(server_txt_name,"w") as server_file:
-    server_ids = PHYSICAL_SERVERS + VIRTUAL_SERVERS # add servers after popping
-    server_file.write(",".join(server_ids))
+    server_file.write(",".join(servers_ids_untouched))
 print(f"Generated CSV: {csv_file_name}\tServer List:{server_txt_name}")
