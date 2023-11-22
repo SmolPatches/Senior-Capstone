@@ -204,3 +204,18 @@ MATCH (inc:Incident)-[:AFFECTS_SERVER]->(srv:Server)
 RETURN inc, srv
 Limit 25
 ```
+## Datacenter Queries
+**Get the datacenter for an application was hosted on Window servers which were affected by incidents**
+```
+match (a:Application{Name:"APP-07270"})-[:HOSTS_APP]-(s:Server{OS:"Windows"})
+match (s)-[AFFECTS_SERVER]-(i:Incident)
+match (s)-[LOCATED_IN]-(dc:DataCenter)
+return a,s,i,dc
+```
+**Get the datacenter for an application hosted on a server that was impacted by a High Severity Incident**
+```
+match (a:Application{Name:"APP-07270"})-[:HOSTS_APP]-(s:Server)
+match (s)-[AFFECTS_SERVER]-(i:Incident{Severity:"1-High"})
+match (s)-[LOCATED_IN]-(dc:DataCenter)
+return a,s,i,dc
+```
