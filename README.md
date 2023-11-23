@@ -1,7 +1,7 @@
 # Senior-Capstone
-# Requirements
+# Install Requirements
 ```bash
-pip install faker==19.8.0
+pip3 install faker==19.8.0
 ```
 # Build Script
 ```bash
@@ -10,22 +10,24 @@ pip install faker==19.8.0
 > This will alias python3  to virtual env if present  
 > Then run python3 files, generating CSVs  
 > Please note that servers.txt must persist and be present in current working directory until all other CSVs are generated  
-# Clear Database
+# Neo4j Queries
+## Clear Database
 
 ```cypher
 SHOW DATABASES
-```
+```  
+
 ```cypher
 CREATE OR REPLACE DATABASE neo4j
 ```
-# Constraints
+## Constraints
 ```cypher
 CREATE CONSTRAINT FOR (s:Server) REQUIRE s.Name IS UNIQUE;
 CREATE CONSTRAINT FOR (i:Incident) REQUIRE i.ID IS UNIQUE;
 CREATE CONSTRAINT FOR (c:ChangeRecord) REQUIRE c.ID IS UNIQUE;
 CREATE CONSTRAINT FOR (a:Application) REQUIRE a.Name IS UNIQUE;
 ```
-# Load Database ( Order Matters )
+## Load Database ( Order Matters )
 ```cypher
 // Create Servers nodes
 LOAD CSV WITH HEADERS FROM "file:///Servers.csv" AS row
@@ -92,7 +94,7 @@ MATCH (dc:DataCenter {Name: s.DataCenter})
 MERGE (s)-[:LOCATED_IN]->(dc);
 ```
 
-## Date Based Queries 
+### Date Based Queries 
 ```cypher
 // Retrieve Incidents within a Timeframe
 MATCH (incident:Incident)
@@ -119,8 +121,9 @@ RETURN changeDate.year AS year, changeDate.month AS month, COUNT(change) AS chan
 ORDER BY year, month;
 ```
 
-## Change Based Queries
-**Get Server Affected By Change**
+### Change Based Queries
+**Get Server Affected By Change**  
+
 ```
 MATCH (c:Change{ID:"CHG-086632"})-[AFFECTS_SERVER]-(s)
 return c,s
@@ -142,7 +145,7 @@ match (change)-[AFFECTS_SERVER]-(s:Server)
 return change,s
 LIMIT 100
 ```
-## Application Based Queries 
+### Application Based Queries 
 **See all which apps are hosted on what servers**  
 ```cypher
 match (a:Application)-[HOSTS_APP]-(s:Server)
@@ -199,19 +202,19 @@ WHERE datetime({epochSeconds: toInteger(c.StartEpochTime)}) >= datetime('2023-01
   AND datetime({epochSeconds: toInteger(c.StartEpochTime)}) <= datetime('2023-12-31T23:59:59Z')
 return a,s,c
 ```
-## Server Queries
+### Server Queries
 ```cypher
 match (p:Server)-[:IS_PARENT]-(s:Server)
 return p,s
 LIMIT 50
 ```
-## Incident Queries
+### Incident Queries
 ```cypher
 MATCH (inc:Incident)-[:AFFECTS_SERVER]->(srv:Server)
 RETURN inc, srv
 Limit 25
 ```
-## Datacenter Queries
+### Datacenter Queries
 **Get the datacenter for an application was hosted on Window servers which were affected by incidents**
 ```cypher
 match (a:Application{Name:"APP-07270"})-[:HOSTS_APP]-(s:Server{OS:"Windows"})
