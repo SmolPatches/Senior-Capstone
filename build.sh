@@ -11,6 +11,6 @@ python3 dataset/application.py
 python3 dataset/changes.py
 python3 dataset/incidents.py
 python3 dataset/dataCenter.py
-echo "exporting dataste to CSV_TGT"
+echo "exporting dataset to CSV_TGT"
 mkdir -p CSV_TGT/
 mv *.csv CSV_TGT

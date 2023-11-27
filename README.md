@@ -202,6 +202,15 @@ WHERE datetime({epochSeconds: toInteger(c.StartEpochTime)}) >= datetime('2023-01
   AND datetime({epochSeconds: toInteger(c.StartEpochTime)}) <= datetime('2023-12-31T23:59:59Z')
 return a,s,c
 ```
+** Get the changes that are affecting servers hosting a specific application(with a name) based off of a date range
+```cypher
+MATCH (a:Application{Name:"APP-07270"})-[HOSTS_APP]->(s:Server)
+match (s)-[AFFECTS_SERVER]-(c:Change)
+MATCH (c:Change)
+WHERE datetime({epochSeconds: toInteger(c.StartEpochTime)}) >= datetime('2023-01-01T00:00:00Z')
+  AND datetime({epochSeconds: toInteger(c.StartEpochTime)}) <= datetime('2023-12-31T23:59:59Z')
+return a,s,c
+```
 ### Server Queries
 ```cypher
 match (p:Server)-[:IS_PARENT]-(s:Server)
@@ -228,4 +237,10 @@ match (a:Application{Name:"APP-07270"})-[:HOSTS_APP]-(s:Server)
 match (s)-[AFFECTS_SERVER]-(i:Incident{Severity:"1-High"})
 match (s)-[LOCATED_IN]-(dc:DataCenter)
 return a,s,i,dc
+```
+** Get the applications affected by a high severity incident after a certain date
+```cypher
+match (s:Server)-[AFFECTS_SERVER]-(i:Incident{Serverity:"1-High"})
+WHERE datetime({epochSeconds: toInteger(i.EpochTime)}) >= datetime('2023-01-01T00:00:00Z') 
+match (s)-[:HOSTS_APP]-(a:Application)
 ```
