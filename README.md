@@ -202,7 +202,7 @@ WHERE datetime({epochSeconds: toInteger(c.StartEpochTime)}) >= datetime('2023-01
   AND datetime({epochSeconds: toInteger(c.StartEpochTime)}) <= datetime('2023-12-31T23:59:59Z')
 return a,s,c
 ```
-** Get the changes that are affecting servers hosting a specific application(with a name) based off of a date range
+**Get the changes that are affecting servers hosting a specific application(with a name) based off of a date range**
 ```cypher
 MATCH (a:Application{Name:"APP-07270"})-[HOSTS_APP]->(s:Server)
 match (s)-[AFFECTS_SERVER]-(c:Change)
