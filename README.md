@@ -237,10 +237,11 @@ match (a:Application{Name:"APP-07270"})-[:HOSTS_APP]-(s:Server)
 match (s)-[AFFECTS_SERVER]-(i:Incident{Severity:"1-High"})
 match (s)-[LOCATED_IN]-(dc:DataCenter)
 return a,s,i,dc
-```
-** Get the applications affected by a high severity incident after a certain date
+```  
+**Get the applications affected by a high severity incident after a certain date**
 ```cypher
-match (s:Server)-[AFFECTS_SERVER]-(i:Incident{Serverity:"1-High"})
-WHERE datetime({epochSeconds: toInteger(i.EpochTime)}) >= datetime('2023-01-01T00:00:00Z') 
+match (s:Server)-[AFFECTS_SERVER]-(i:Incident{Severity:"1-High"})
+WHERE datetime({epochSeconds: toInteger(i.EpochTime)}) >= datetime('2022-05-01T00:00:00Z') 
 match (s)-[:HOSTS_APP]-(a:Application)
+return a,s,i
 ```
