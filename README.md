@@ -244,3 +244,42 @@ WHERE datetime({epochSeconds: toInteger(i.EpochTime)}) >= datetime('2022-05-01T0
 match (s)-[:HOSTS_APP]-(a:Application)
 return a,s,i
 ```
+# 4. Neo4J Memory Setttings
+Below are the changes made to Neo4J settings to handle full dataset ingestion.
+```
+#********************************************************************
+# Memory Settings
+#********************************************************************
+#
+# Memory settings are specified kibibytes with the 'k' suffix, mebibytes with
+# 'm' and gibibytes with 'g'.
+# If Neo4j is running on a dedicated server, then it is generally recommended
+# to leave about 2-4 gigabytes for the operating system, give the JVM enough
+# heap to hold all your transaction state and query context, and then leave the
+# rest for the page cache.
+
+# Java Heap Size: by default the Java heap size is dynamically calculated based
+# on available system resources. Uncomment these lines to set specific initial
+# and maximum heap size.
+server.memory.heap.initial_size=8g
+server.memory.heap.max_size=8g
+
+# The amount of memory to use for mapping the store files.
+# The default page cache memory assumes the machine is dedicated to running
+# Neo4j, and is heuristically set to 50% of RAM minus the Java heap size.
+server.memory.pagecache.size=10g
+
+# Limit the amount of memory that all of the running transaction can consume.
+# The default value is 70% of the heap size limit.
+dbms.memory.transaction.total.max=0
+
+# Limit the amount of memory that a single transaction can consume.
+# By default there is no limit.
+db.memory.transaction.max=0
+#********************************************************************
+# Other Neo4j system properties
+#********************************************************************
+dbms.memory.heap.initial_size=8G
+dbms.memory.heap.max_size=8G
+dbms.memory.pagecache.size=10G
+```
